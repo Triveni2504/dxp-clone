@@ -1,10 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
+import App from './App.tsx';
+import AddDocumentPage from './pages/AddDocumentPage.tsx'; // Ensure this path matches your folder structure
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/add-document" element={<AddDocumentPage />} />
+      </Routes>
+    </BrowserRouter>
+  </StrictMode>
+);
