@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import {
   Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Menu
 } from '@mui/material';
@@ -6,7 +6,7 @@ import {
 interface FilterRowProps {
   anchorEl: HTMLElement | null;
   open: boolean;
-  handleMenuClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  handleMenuClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleClose: () => void;
   handleMenuItemClick: (option: 'code' | 'document') => void;
 }

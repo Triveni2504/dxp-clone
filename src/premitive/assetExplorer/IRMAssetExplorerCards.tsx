@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import InfiniteScrollList from '../common/InfiniteScrollList';
 import apiInstance from '../../api/apiInstance';
 import { ListItemText } from '@mui/material';

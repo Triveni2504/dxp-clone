@@ -7,18 +7,18 @@ interface DrawerComponentProps {
 }
 
 const DrawerComponent: React.FC<DrawerComponentProps> = ({ isOpen, toggleDrawer }) => {
-  return (
-    <Drawer anchor="left" open={isOpen} onClose={toggleDrawer}>
-      <List>
-        <ListItem button onClick={toggleDrawer}>
-          <ListItemText primary="Item 1" />
-        </ListItem>
-        <ListItem button onClick={toggleDrawer}>
-          <ListItemText primary="Item 2" />
-        </ListItem>
-      </List>
-    </Drawer>
-  );
+    return (
+        <Drawer anchor="left" open={isOpen} onClose={toggleDrawer}>
+            <List>
+                <ListItem component="button" onClick={toggleDrawer}>
+                    <ListItemText primary="Item 1" />
+                </ListItem>
+                <ListItem component="button" onClick={toggleDrawer}>
+                    <ListItemText primary="Item 2" />
+                </ListItem>
+            </List>
+        </Drawer>
+    );
 };
 
 export default DrawerComponent;
