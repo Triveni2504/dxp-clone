@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App.tsx';
-import AddDocumentPage from './pages/AddDocumentPage.tsx'; // Ensure this path matches your folder structure
+import AddDocumentPage from './pages/IRMAddAsset.tsx'; // Ensure this path matches your folder structure
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -3,7 +3,7 @@ import {
   Box, Button, Typography, TextField
 } from '@mui/material';
 
-function AddDocumentPage() {
+function IRMAddAsset() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [fileURL, setFileURL] = useState<string | null>(null);
@@ -78,4 +78,4 @@ function AddDocumentPage() {
   );
 }
 
-export default AddDocumentPage;
+export default IRMAddAsset;
