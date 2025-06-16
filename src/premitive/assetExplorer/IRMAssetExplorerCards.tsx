@@ -1,48 +1,47 @@
-import { useState, useEffect } from 'react';
-import InfiniteScrollList from '../common/InfiniteScrollList';
-import apiInstance from '../../api/apiInstance';
-import { ListItemText } from '@mui/material';
-
-interface Post {
-  id: number;
-  title: string;
-  author: string;
-  content?: string;
-}
+import { useState } from 'react';
+import IRMCardsList from './IRMCardsList';
+import IRMAddAsset from '../addAsset/IRMAddAsset';
+import IRMAssetViewer from '../assetViewer/IRMAssetViewer';
+import { Box, Button } from '@mui/material';
 
 const IRMAssetExplorerCards = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [activeCard, setActiveCard] = useState('IRMCardsList'); // Default card is IRMCardsList
 
-  const fetchPosts = async () => {
-    try {
-      const response = await apiInstance.get(`/posts?_limit=10&_page=${page}`);
-      const newPosts = response.data;
-      if (newPosts.length === 0) {
-        setHasMore(false);
-      } else {
-        setPosts(prev => [...prev, ...newPosts]);
-        setPage(prev => prev + 1);
-      }
-    } catch (error) {
-      console.error(error);
+  const renderCard = () => {
+    switch (activeCard) {
+      case 'IRMAddAsset':
+        return <IRMAddAsset />;
+      case 'IRMAssetViewer':
+        return <IRMAssetViewer />;
+      default:
+        return <IRMCardsList />;
     }
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
   return (
-    <InfiniteScrollList
-      items={posts}
-      next={fetchPosts}
-      hasMore={hasMore}
-      renderItem={(post) => (
-        <ListItemText primary={post.title} secondary={post.author} />
-      )}
-    />
+    <Box sx={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#f4f6f8' }}>
+      <Box sx={{ position: 'absolute', top: 16, left: 16 }}>
+        {activeCard !== 'IRMCardsList' && (
+          <Button variant="contained" onClick={() => setActiveCard('IRMCardsList')}>
+            Back
+          </Button>
+        )}
+      </Box>
+      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {renderCard()}
+      </Box>
+      <Box sx={{ position: 'absolute', bottom: 16, display: 'flex', gap: 2 }}>
+        <Button variant="contained" onClick={() => setActiveCard('IRMCardsList')}>
+          Show IRMCardsList
+        </Button>
+        <Button variant="contained" onClick={() => setActiveCard('IRMAddAsset')}>
+          Show IRMAddAsset
+        </Button>
+        <Button variant="contained" onClick={() => setActiveCard('IRMAssetViewer')}>
+          Show IRMAssetViewer
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
