@@ -8,7 +8,7 @@ import LongCardTemplateGen from './premitive/templateGenerator/longCardTemplateG
 function App() {
   return (
     // <IRMAssetExplorerCards />
-    <Box sx={{width: "100%", border: "1px solid red"}}>
+    <Box sx={{width: "100%"}}>
 <LongCardTemplateGen />
     </Box>
     // 
