@@ -24,6 +24,9 @@ const LongCardTemplateGen = () => {
     setAlignment('left');
     setSize(1);
 
+    // Calculate the maximum display order dynamically
+    const maxDisplayOrder = columnData.length + 1;
+
     // Add a column configuration to columnData
     const newColumnData = [
       ...columnData,
@@ -32,10 +35,15 @@ const LongCardTemplateGen = () => {
         dataType: 'string',
         alignment: 'left',
         size: 1, // Use size instead of flex
-        displayOrder: columnData.length + 1, // Default display order
+        displayOrder: maxDisplayOrder, // Automatically set to the max display order
       },
     ];
+
+    // Update columnData state
     setColumnData(newColumnData);
+
+    // Log the updated columnData for debugging
+    console.log('Updated Column Data:', newColumnData);
 
     // Add a column to the list
     const newColumns = [...columns, `Column ${columns.length + 1}`];
@@ -49,7 +57,7 @@ const LongCardTemplateGen = () => {
         alignment: 'left',
         dataType: 'string',
         size: 1, // Use size instead of flex
-        displayOrder: previewItems.length + 1, // Default display order
+        displayOrder: maxDisplayOrder, // Automatically set to the max display order
         booleanValue: false, // Default boolean value for switches
       },
     ];
@@ -59,8 +67,11 @@ const LongCardTemplateGen = () => {
     const newColumnIndex = newColumns.length - 1; // Index of the newly added column
     setSelectedColumn(newColumnIndex);
 
-    // Load the new column's data into the templateConfig section
-    loadColumnDataToTemplateConfig(newColumnIndex);
+    // Pass the updated columnData directly to loadColumnDataToTemplateConfig
+    loadColumnDataToTemplateConfig(newColumnIndex, newColumnData);
+
+    // Explicitly set the displayOrder dropdown to the highest value
+    setDisplayOrder(maxDisplayOrder.toString());
   };
 
   const deleteColumn = (index: number) => {
@@ -107,14 +118,21 @@ const LongCardTemplateGen = () => {
     }
   };
 
-  const loadColumnDataToTemplateConfig = (index: number) => {
-    const selectedData = columnData[index];
+  const loadColumnDataToTemplateConfig = (index: number, updatedColumnData: any[] = columnData) => {
+    const selectedData = updatedColumnData[index];
+    if (!selectedData) {
+      console.error(`No column data found for index ${index}`);
+      return;
+    }
+
     console.log('Selected Column Data:', selectedData); // Log the columnData for the selected column
+    console.log('Selected Column Index:', index);
+    console.log('Column Data:', updatedColumnData);
     setAssetDetails(selectedData.assetType);
     setDataType(selectedData.dataType);
     setAlignment(selectedData.alignment);
     setSize(selectedData.size);
-    setDisplayOrder(index + 1); // Assuming display order corresponds to column index + 1
+    setDisplayOrder(selectedData.displayOrder.toString());
   };
 
   const handleSwitchToggle = (index: number) => {
@@ -165,8 +183,12 @@ const LongCardTemplateGen = () => {
             <Box
               key={index}
               onClick={() => {
-                setSelectedColumn(index); // Set selected column
-                loadColumnDataToTemplateConfig(index); // Load column data into templateConfig
+                if (index >= 0 && index < columnData.length) {
+                  setSelectedColumn(index); // Set selected column
+                  loadColumnDataToTemplateConfig(index); // Load column data into templateConfig
+                } else {
+                  console.error(`Invalid column index: ${index}`);
+                }
               }}
               sx={{
                 display: 'flex',
@@ -242,7 +264,7 @@ const LongCardTemplateGen = () => {
             >
               <MenuItem value="Asset 1">Asset 1</MenuItem>
               <MenuItem value="Asset 2">Asset 2</MenuItem>
-              <MenuItem value="Asset 3">Asset 3</MenuItem>
+              <MenuItem value="Asset 3 TESTEST TESTEST TESTESTTESTEST TESTEST TESTEST TESTESTTESTEST">Asset 3</MenuItem>
             </Select>
 
             <Select
@@ -324,16 +346,28 @@ const LongCardTemplateGen = () => {
                   <Box
                     key={index}
                     sx={{
-                      flex: item.size, // Use size to determine flex value
+                      flex: equalSpacing ? '1 0 auto' : item.size, // Ensure equal width when Equal Spacing is enabled
                       textAlign: item.alignment, // Align items based on the alignment value
                       border: '1px solid #ddd',
                       borderRadius: '4px',
                       padding: 2,
                       backgroundColor: '#fff',
+                      whiteSpace: truncate ? 'nowrap' : 'normal', // Truncate text if Truncate switch is enabled
+                      overflow: truncate ? 'hidden' : 'visible', // Hide overflow if Truncate switch is enabled
+                      textOverflow: truncate ? 'ellipsis' : 'clip', // Add ellipsis for truncated text
+                      maxWidth: equalSpacing ? `${100 / previewItems.length}%` : 'none', // Ensure equal width when Equal Spacing is enabled
                     }}
                   >
                     {item.dataType === 'string' || item.dataType === 'number' ? (
-                      <Typography>{item.assetType}</Typography>
+                      <Box
+                        sx={{
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {item.assetType}
+                      </Box>
                     ) : item.dataType === 'boolean' ? (
                       <Switch
                         checked={item.booleanValue || false} // Use the booleanValue property
