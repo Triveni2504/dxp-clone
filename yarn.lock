@@ -497,6 +497,27 @@
     prop-types "^15.8.1"
     react-is "^19.1.0"
 
+"@napi-rs/canvas-win32-x64-msvc@0.1.71":
+  version "0.1.71"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-0.1.71.tgz"
+  integrity sha512-oJughk6xjsRIr0Rd9EqjmZmhIMkvcPuXgr3MNn2QexTqn+YFOizrwHS5ha0BDfFl7TEGRvwaDUXBQtu8JKXb8A==
+
+"@napi-rs/canvas@^0.1.67":
+  version "0.1.71"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas/-/canvas-0.1.71.tgz"
+  integrity sha512-92ybDocKl6JM48ZpYbj+A7Qt45IaTABDk0y3sDecEQfgdhfNzJtEityqNHoCZ4Vty2dldPkJhxgvOnbrQMXTTA==
+  optionalDependencies:
+    "@napi-rs/canvas-android-arm64" "0.1.71"
+    "@napi-rs/canvas-darwin-arm64" "0.1.71"
+    "@napi-rs/canvas-darwin-x64" "0.1.71"
+    "@napi-rs/canvas-linux-arm-gnueabihf" "0.1.71"
+    "@napi-rs/canvas-linux-arm64-gnu" "0.1.71"
+    "@napi-rs/canvas-linux-arm64-musl" "0.1.71"
+    "@napi-rs/canvas-linux-riscv64-gnu" "0.1.71"
+    "@napi-rs/canvas-linux-x64-gnu" "0.1.71"
+    "@napi-rs/canvas-linux-x64-musl" "0.1.71"
+    "@napi-rs/canvas-win32-x64-msvc" "0.1.71"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -517,6 +538,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@pdftron/webviewer@^11.5.0":
+  version "11.5.0"
+  resolved "https://registry.npmjs.org/@pdftron/webviewer/-/webviewer-11.5.0.tgz"
+  integrity sha512-fuQl8vJogerXj65KaClZVyZx2k59L5B5ILij+spKP93NupikUk20fRtpladIlitMj/PGIg8uqlhD+YffhyvwgQ==
 
 "@polka/url@^1.0.0-next.24":
   version "1.0.0-next.29"
@@ -1863,6 +1889,13 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+pdfjs-dist@^5.3.31:
+  version "5.3.31"
+  resolved "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-5.3.31.tgz"
+  integrity sha512-EhPdIjNX0fcdwYQO+e3BAAJPXt+XI29TZWC7COhIXs/K0JHcUt1Gdz1ITpebTwVMFiLsukdUZ3u0oTO7jij+VA==
+  optionalDependencies:
+    "@napi-rs/canvas" "^0.1.67"
 
 picocolors@^1.1.1:
   version "1.1.1"
