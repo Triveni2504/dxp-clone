@@ -12,7 +12,7 @@ interface FilterRowProps {
   handleMenuItemClick: (option: 'code' | 'document') => void;
 }
 
-const FilterRow: React.FC<FilterRowProps> = ({
+const IRMHeader: React.FC<FilterRowProps> = ({
   anchorEl,
   open,
   handleMenuClick,
@@ -22,7 +22,7 @@ const FilterRow: React.FC<FilterRowProps> = ({
   const navigate = useNavigate();
 
   const handleViewClick = () => {
-    navigate('../IRMAssetViewer/IRMMultiViewer'); // Navigate to the IRMMultiViewer page
+    navigate('/asset-viewer'); // Navigate to the IRMMultiViewer page
   };
 
   return (
@@ -35,7 +35,7 @@ const FilterRow: React.FC<FilterRowProps> = ({
         Add Asset
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem onClick={() => handleMenuItemClick('code')}>Code</MenuItem>
+        <MenuItem onClick={() => handleMenuItemClick('code')}>Case</MenuItem>
         <MenuItem onClick={() => handleMenuItemClick('document')}>Document</MenuItem>
       </Menu>
 
@@ -83,7 +83,7 @@ const FilterRow: React.FC<FilterRowProps> = ({
   );
 };
 
-export default FilterRow;
+export default IRMHeader;
 // import React from 'react';
 // import {
 //   Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Menu

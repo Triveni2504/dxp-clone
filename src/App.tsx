@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import apiInstance from './api/apiInstance';
 import IRMAssetExplorerCards from './premitive/assetExplorer/IRMAssetExplorerCards';
-import FilterRow from './premitive/common/FilterRow';
+import IRMHeader from './premitive/header/IRMHeader';
 
 function App() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ function App() {
         <Typography variant="h5" gutterBottom>Asset Explorer</Typography>
 
         {/* Filter Row */}
-        <FilterRow
+        <IRMHeader
           anchorEl={anchorEl}
           open={open}
           handleMenuClick={handleMenuClick}
