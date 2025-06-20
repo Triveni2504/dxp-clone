@@ -1,4 +1,4 @@
-import { Box, CircularProgress, ListItemText, List, ListItem, Checkbox, Typography } from "@mui/material";
+import { Box, CircularProgress, ListItemText, List, ListItem } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 type InfiniteScrollListProps = {
@@ -38,35 +38,7 @@ const InfiniteScrollList: React.FC<InfiniteScrollListProps> = ({
                 <List>
                     {items.map((item, index) => (
                         <ListItem key={index} divider>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    width: '100%',
-                                    padding: 1,
-                                    border: '1px solid #ccc',
-                                    borderRadius: 2,
-                                }}
-                            >
-                                {/* Checkbox */}
-                                <Checkbox />
-
-                                {/* Name of the item */}
-                                <Typography sx={{ flex: 1, marginLeft: 1 }}>
-                                    {renderItem(item)}
-                                </Typography>
-
-                                {/* Placeholder */}
-                                <Typography sx={{ marginLeft: 2, color: 'gray' }}>
-                                    
-                                </Typography>
-
-                                {/* Version */}
-                                <Typography sx={{ marginLeft: 2, fontWeight: 'bold' }}>
-                                    Version 1.0
-                                </Typography>
-                            </Box>
+                            {renderItem(item)}
                         </ListItem>
                     ))}
                 </List>

@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+
 interface DocumentPreviewProps {
   fileURL: string;
   selectedFile: File;
@@ -6,7 +7,17 @@ interface DocumentPreviewProps {
 
 function IRMDocumentViewer({ fileURL, selectedFile }: DocumentPreviewProps) {
   return (
-    <Box sx={{ flex: 2, border: '1px solid #ccc', borderRadius: 2, p: 2 }}>
+    <Box
+      sx={{
+        flex: 2,
+        border: '1px solid #ccc',
+        borderRadius: 2,
+        p: 2,
+        height: '100%', // Ensure the container takes full height
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Typography variant="h6" gutterBottom>
         Document Preview
       </Typography>
@@ -21,8 +32,11 @@ function IRMDocumentViewer({ fileURL, selectedFile }: DocumentPreviewProps) {
           src={fileURL}
           title="PDF Preview"
           width="100%"
-          height="500px"
-          style={{ border: 'none' }}
+          style={{
+            height: '100%', // Ensure iframe takes full height
+            border: 'none',
+            flexGrow: 1, // Allow iframe to grow within the container
+          }}
         />
       ) : (
         <Typography variant="body1">

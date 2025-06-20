@@ -34,6 +34,9 @@ function App() {
     // You can handle 'code' navigation here later
   };
 
+  // Search query state
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
     <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f4f6f8' }}>
       {/* Main Content */}
@@ -47,10 +50,11 @@ function App() {
           handleMenuClick={handleMenuClick}
           handleClose={handleClose}
           handleMenuItemClick={handleMenuItemClick}
+          onSearchChange={setSearchQuery} // Pass search query handler
         />
 
         {/* Asset Cards */}
-        <IRMAssetExplorerCards />
+        <IRMAssetExplorerCards searchQuery={searchQuery} /> {/* Pass search query */}
       </Box>
     </Box>
   );

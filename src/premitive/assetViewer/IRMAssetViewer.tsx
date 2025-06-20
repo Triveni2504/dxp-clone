@@ -1,17 +1,39 @@
 import { Box, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IRMDocumentViewer from '../common/IRMDocumentViewer';
+import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useEffect, useState } from 'react';
 
-interface DocumentViewerWithAccordionProps {
-  fileURL?: string;
-  selectedFile?: File | null;
-}
+function IRMAssetViewer() {
+  const location = useLocation(); // Get state from navigation
+  const { fileUUID } = location.state || {}; // Extract fileUUID from navigation state
+  const [fileDetails, setFileDetails] = useState(null); // State for file details
 
-function IRMAssetViewer({ fileURL = "", selectedFile = null }: DocumentViewerWithAccordionProps) {
+  useEffect(() => {
+    const uploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles') || '[]');
+    const file = uploadedFiles.find((f) => f.uuid === fileUUID);
+
+    if (!file) {
+      console.error('File not found in localStorage for fileUUID:', fileUUID); // Debug log
+    } else {
+      console.log('Loaded file details:', file); // Debug log
+    }
+
+    setFileDetails(file);
+  }, [fileUUID]);
+
   return (
     <Box sx={{ display: 'flex', gap: 2, height: '100%', p: 2 }}>
       {/* Left Side: Document Viewer */}
-      <IRMDocumentViewer fileURL={fileURL} selectedFile={selectedFile || new File([], "")} />
+      <Box sx={{ flex: '0 0 70%', border: '1px solid #ccc', borderRadius: 2, p: 2 }}>
+        {fileDetails?.fileURL ? (
+          <IRMDocumentViewer fileURL={fileDetails.fileURL} selectedFile={new File([], fileDetails.name)} />
+        ) : (
+          <Typography variant="body1" color="textSecondary">
+            No document preview available.
+          </Typography>
+        )}
+      </Box>
 
       {/* Right Side: Accordion */}
       <Box sx={{ flex: 1, border: '1px solid #ccc', borderRadius: 2, p: 2 }}>
@@ -20,32 +42,26 @@ function IRMAssetViewer({ fileURL = "", selectedFile = null }: DocumentViewerWit
         </Typography>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Section 1</Typography>
+            <Typography>File Name</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Sample data for Section 1. You can replace this with dynamic content later.
-            </Typography>
+            <Typography>{fileDetails?.name || "No file selected"}</Typography>
           </AccordionDetails>
         </Accordion>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Section 2</Typography>
+            <Typography>File Size</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Sample data for Section 2. You can replace this with dynamic content later.
-            </Typography>
+            <Typography>{fileDetails?.size ? `${fileDetails.size} bytes` : "No file selected"}</Typography>
           </AccordionDetails>
         </Accordion>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Section 3</Typography>
+            <Typography>Creation Date</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Sample data for Section 3. You can replace this with dynamic content later.
-            </Typography>
+            <Typography>{fileDetails?.creationDate || "No file selected"}</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>

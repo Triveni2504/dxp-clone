@@ -1,46 +1,129 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import InfiniteScrollList from '../common/InfiniteScrollList';
-import apiInstance from '../../api/apiInstance';
-import { ListItemText } from '@mui/material';
+import { Box, Checkbox, Typography, IconButton } from '@mui/material';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'; // Import PDF icon
+import DeleteIcon from '@mui/icons-material/Delete'; // Import Delete icon
+import { Sparklines, SparklinesLine } from 'react-sparklines'; // Import Sparklines for sparkline charts
 
-interface Post {
-  id: number;
-  title: string;
-  author: string;
-  content?: string;
+// Define the type for uploaded file metadata
+interface UploadedFile {
+  uuid: string;
+  name: string;
+  extension: string;
+  creationDate: string;
+  size: number; // Size in bytes
+  type: string;
+  fileURL: string; // Add file URL for navigation
 }
 
-const IRMAssetExplorerCards = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+interface IRMAssetExplorerCardsProps {
+  searchQuery: string; // Add prop for search query
+}
 
-  const fetchPosts = async () => {
-    try {
-      const response = await apiInstance.get(`/posts?_limit=10&_page=${page}`);
-      const newPosts = response.data;
-      if (newPosts.length === 0) {
-        setHasMore(false);
-      } else {
-        setPosts(prev => [...prev, ...newPosts]);
-        setPage(prev => prev + 1);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const IRMAssetExplorerCards: React.FC<IRMAssetExplorerCardsProps> = ({ searchQuery }) => {
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [hasMore, setHasMore] = useState(false); // No pagination for localStorage data
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-    fetchPosts();
+    // Load uploaded files from localStorage on component mount
+    const existingMetadata = JSON.parse(localStorage.getItem('uploadedFiles') || '[]') as UploadedFile[];
+    setUploadedFiles(existingMetadata);
   }, []);
+
+  // Helper function to format date
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Helper function to format size in MB
+  const formatSize = (sizeInBytes: number): string => {
+    const sizeInMB = sizeInBytes / (1024 * 1024); // Convert bytes to MB
+    return `${sizeInMB.toFixed(2)} MB`; // Format to 2 decimal places
+  };
+
+  // Helper function to generate random data for sparkline charts
+  const generateRandomData = (): number[] => {
+    return Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
+  };
+
+  // Function to handle item deletion
+  const handleDelete = (uuid: string) => {
+    const updatedFiles = uploadedFiles.filter((file) => file.uuid !== uuid);
+    setUploadedFiles(updatedFiles);
+    localStorage.setItem('uploadedFiles', JSON.stringify(updatedFiles)); // Update localStorage
+  };
+
+  // Handle row double-click to navigate to asset viewer
+  const handleRowDoubleClick = (file: UploadedFile) => {
+    console.log('Navigating with fileUUID:', file.uuid); // Debug log
+    navigate('/asset-viewer', { state: { fileUUID: file.uuid } }); // Pass fileUUID
+  };
+
+  const filteredFiles = uploadedFiles.filter((file) =>
+    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <InfiniteScrollList
-      items={posts}
-      next={fetchPosts}
+      items={filteredFiles}
+      next={() => {}} // No pagination, so no fetch logic
       hasMore={hasMore}
-      renderItem={(post) => (
-        <ListItemText primary={post.title} secondary={post.author} />
+      renderItem={(file) => (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+            padding: 1,
+            border: '1px solid #ccc',
+            borderRadius: 2,
+            cursor: 'pointer', // Add pointer cursor for rows
+          }}
+          onDoubleClick={() => handleRowDoubleClick(file)} // Handle double-click
+        >
+          {/* Checkbox */}
+          <Checkbox />
+
+          {/* File Name and Details */}
+          <Box sx={{ flex: 1, marginLeft: 1, display: 'flex', alignItems: 'center' }}>
+            <PictureAsPdfIcon sx={{ marginRight: 1, color: 'red' }} /> {/* PDF Icon */}
+            <Box>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                {file.name}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Size: {formatSize(file.size)}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Created: {formatDate(file.creationDate)}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Sparkline Chart */}
+          <Box sx={{ marginLeft: 2 }}>
+            <Sparklines data={generateRandomData()} width={100} height={20}>
+              <SparklinesLine color="blue" />
+            </Sparklines>
+          </Box>
+
+          {/* Version */}
+          <Typography variant="body2" sx={{ marginLeft: 2, fontWeight: 'bold' }}>
+            Version 1.0
+          </Typography>
+
+          {/* Delete Button */}
+          <IconButton onClick={() => handleDelete(file.uuid)} sx={{ marginLeft: 2 }}>
+            <DeleteIcon color="error" />
+          </IconButton>
+        </Box>
       )}
     />
   );
